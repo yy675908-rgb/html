@@ -213,6 +213,38 @@
   .card.dragging{opacity:.45;}
   .card.dragover{box-shadow:0 0 0 2px var(--celadon);}
   .cards.dragmode .card{cursor:grab;}
+  /* 更多分类按钮 */
+  .more-cat{margin-top:8px;width:100%;border:1px dashed var(--line);background:var(--card);color:var(--ink-soft);
+    border-radius:10px;padding:8px 10px;font-size:13px;cursor:pointer;}
+  .more-cat:active{transform:translateY(1px);}
+  /* 底部面板浮层（更多分类 / 长按动作） */
+  .sheet-ov{position:fixed;inset:0;background:rgba(20,30,26,.42);z-index:1200;display:none;align-items:flex-end;justify-content:center;}
+  .sheet-ov.open{display:flex;}
+  .sheet{background:var(--card);width:100%;max-width:520px;border-radius:16px 16px 0 0;max-height:72vh;display:flex;flex-direction:column;
+    box-shadow:0 -6px 24px rgba(0,0,0,.18);animation:sheetUp .18s ease;}
+  @keyframes sheetUp{from{transform:translateY(16px);opacity:.6;}to{transform:translateY(0);opacity:1;}}
+  .sheet-sm{padding:10px;gap:8px;border-radius:16px;max-width:340px;margin:0 12px 18px;align-self:center;}
+  .sheet-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 6px;}
+  .sheet-head h3{margin:0;font-family:var(--serif);font-size:17px;color:var(--pine-2);}
+  .sheet-x{border:none;background:none;font-size:18px;color:var(--muted);cursor:pointer;padding:4px 8px;}
+  .sheet-body{overflow:auto;padding:4px 12px 18px;}
+  .cat-row{display:flex;align-items:center;gap:8px;padding:11px 8px;border-bottom:1px solid var(--line-soft);}
+  .cat-row .nm{flex:1;font-size:15px;color:var(--ink);cursor:pointer;}
+  .cat-row .cnt{font-size:12px;color:var(--muted);background:var(--line-soft);border-radius:20px;padding:1px 9px;}
+  .cat-row .ic{border:none;background:none;font-size:15px;cursor:pointer;color:var(--muted);padding:5px 7px;border-radius:7px;}
+  .cat-row .ic:active{background:var(--line-soft);}
+  .ca-name{font-size:14px;color:var(--ink);text-align:center;padding:8px 6px 4px;font-weight:600;}
+  .ca-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px;font-size:15px;color:var(--ink);cursor:pointer;}
+  .ca-btn:active{transform:translateY(1px);}
+  .ca-btn.danger{color:#b23b3b;border-color:#e7c6c6;}
+  .ca-btn.ghost{color:var(--muted);}
+  /* 折叠卡片：默认只显示标题 */
+  .card-title{display:flex;align-items:center;gap:8px;}
+  .card-title .chev{font-size:11px;color:var(--muted);transition:transform .15s;flex:0 0 auto;}
+  .card.expanded .card-title .chev{transform:rotate(90deg);}
+  .card .collapsible{display:none;}
+  .card.expanded .collapsible{display:block;}
+  .card-title.clickable{cursor:pointer;}
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 </style>
 <link rel="manifest" href="manifest.json">
@@ -254,18 +286,12 @@
         <input id="newCatInput" type="text" placeholder="新建分类…" autocomplete="off">
         <button class="btn sm" id="newCatBtn">＋</button>
       </div>
+      <button class="more-cat" id="moreCatBtn">≣ 更多分类 / 管理</button>
     </aside>
 
     <main class="main">
       <div class="main-head">
         <div class="active-pills" id="activePills"></div>
-        <div class="sortbar" id="sortbar">
-          <span>排序</span>
-          <select id="sortSel">
-            <option value="added">按添加时间</option>
-            <option value="title">按标题</option>
-          </select>
-        </div>
       </div>
       <div class="tagbar" id="tagbar"></div>
       <div id="content"></div>
@@ -326,10 +352,26 @@
   <iframe id="viewerFrame" referrerpolicy="no-referrer"></iframe>
 </div>
 
+<!-- 更多分类 / 管理面板 -->
+<div class="sheet-ov" id="catPanelOv">
+  <div class="sheet">
+    <div class="sheet-head"><h3>全部分类</h3><button class="sheet-x" id="catPanelClose">✕</button></div>
+    <div class="sheet-body" id="catPanelList"></div>
+  </div>
+</div>
+
+<!-- 长按分类的动作菜单 -->
+<div class="sheet-ov" id="catActionsOv">
+  <div class="sheet sheet-sm">
+    <div class="ca-name" id="caName"></div>
+    <button class="ca-btn" id="caRename">✎ 重命名</button>
+    <button class="ca-btn danger" id="caDelete">🗑 删除分类</button>
+    <button class="ca-btn ghost" id="caCancel">取消</button>
+  </div>
+</div>
+
 <!-- 种子数据：首次打开/清空后载入；之后以本机自动保存为准 -->
-<script id="__seed" type="application/json">
-{"v":2,"cats":[{"id":"c_nao","name":"脑血管病"},{"id":"c_zhou","name":"周围神经"},{"id":"c_yu","name":"认知与语言"},{"id":"c_zhongyi","name":"中医脑病"},{"id":"c_ying","name":"神经影像"}],"items":[]}
-</script>
+<script id="__seed" type="application/json">{"v":2,"cats":[{"id":"c_nrx","name":"神经病学"},{"id":"c_tcm","name":"中医"},{"id":"c_img","name":"影像"},{"id":"c_book","name":"书"},{"id":"c_file","name":"文件"},{"id":"c_other","name":"其他"}],"items":[]}</script>
 
 <script>
 (function(){
@@ -337,8 +379,9 @@
   var LS_KEY = "studyOrg_v2";
   var DB_NAME = "studyOrgDB", DB_STORE = "docs";
   var state = load();
-  var ui = { activeCat:"all", search:"", tag:null, editingId:null, _editFile:"", sort:"added", renamingCat:null };
+  var ui = { activeCat:"all", search:"", tag:null, editingId:null, _editFile:"", expanded:{}, caId:null };
   var pendingDoc = null, pendingRemoveFile = false, viewerURL = null, currentViewItem = null;
+  var cardSuppress = false, chipSuppress = false;
 
   function val(id){ return document.getElementById(id).value; }
   function byId(id){ return state.items.find(function(x){return x.id===id;}); }
@@ -406,6 +449,7 @@
 
   // ---------- helpers ----------
   function catName(id){ var c=state.cats.find(function(x){return x.id===id;}); return c?c.name:null; }
+  function catsSorted(){ return state.cats.slice().sort(function(a,b){ return (a.name||"").localeCompare(b.name||"","zh"); }); }
   function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
   function countIn(id){ return state.items.filter(function(it){return it.cat===id;}).length; }
   function uncatCount(){ return state.items.filter(function(it){return !it.cat||!catName(it.cat);}).length; }
@@ -417,10 +461,6 @@
   }
   function fmtDate(ts){ var d=new Date(ts||Date.now()),p=function(n){return(n<10?'0':'')+n;}; return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
   function fmtSize(b){ if(!b) return ""; if(b<1024) return b+" B"; if(b<1048576) return (b/1024).toFixed(0)+" KB"; return (b/1048576).toFixed(1)+" MB"; }
-  function sortItems(arr){
-    if(ui.sort==="title"){ return arr.slice().sort(function(a,b){ return (a.title||"").localeCompare(b.title||"","zh"); }); }
-    return arr; // 添加时间 = 数组顺序（最新在前 / 可拖动）
-  }
 
   // ---------- open document ----------
   function openItem(it){
@@ -450,7 +490,6 @@
     try{ document.getElementById("viewerFrame").contentWindow.postMessage({type:"request-html"},"*"); }catch(_){}
     setTimeout(function(){ if(!done && it.docKey){ docGet(it.docKey).then(function(d){ if(d) fin(d.content); }); } },500);
   }
-  // 文档内点“保存” -> 回写 App 的 IndexedDB
   window.addEventListener("message", function(e){
     if(!e.data) return;
     if(e.data.type==="doc-save" && currentViewItem && currentViewItem.docKey){
@@ -462,32 +501,18 @@
   });
 
   // ---------- render ----------
-  function render(){ renderRail(); renderPills(); renderToolbar(); renderContent(); }
+  function render(){ renderRail(); renderPills(); renderTags(); renderContent(); }
 
   function renderRail(){
     var list=document.getElementById("catList"); var html="";
-    html+=railBtn("all","全部",state.items.length,ui.activeCat==="all");
-    state.cats.forEach(function(c){
-      if(ui.renamingCat===c.id){
-        html+='<li class="cat-item"><div class="cat-rename"><input id="renameInput" type="text" value="'+esc(c.name)+'"><button class="ok" data-renameok="'+c.id+'">✓</button></div></li>';
-      } else {
-        html+='<li class="cat-item">'+catBtnHTML(c.id,c.name,countIn(c.id),ui.activeCat===c.id)+
-          '<span class="cat-edit">'+
-            '<button class="icon-btn" data-rename="'+c.id+'" title="重命名">✎</button>'+
-            '<button class="icon-btn" data-delcat="'+c.id+'" title="删除分类">🗑</button>'+
-          '</span></li>';
-      }
-    });
-    if(uncatCount()>0) html+=railBtn("__none","未归类",uncatCount(),ui.activeCat==="__none");
+    html+=chip("all","全部",state.items.length,ui.activeCat==="all");
+    catsSorted().forEach(function(c){ html+=chip(c.id,c.name,countIn(c.id),ui.activeCat===c.id); });
+    if(uncatCount()>0) html+=chip("__none","未归类",uncatCount(),ui.activeCat==="__none");
     list.innerHTML=html;
-    var ri=document.getElementById("renameInput");
-    if(ri){ ri.focus(); ri.select();
-      ri.onkeydown=function(e){ if(e.key==="Enter") commitRename(); else if(e.key==="Escape"){ ui.renamingCat=null; render(); } };
-      ri.onblur=function(){ commitRename(); };
-    }
   }
-  function railBtn(id,name,count,active){ return '<li class="cat-item">'+catBtnHTML(id,name,count,active)+'</li>'; }
-  function catBtnHTML(id,name,count,active){ return '<button class="cat-btn'+(active?" active":"")+'" data-cat="'+id+'"><span>'+esc(name)+'</span><span class="count">'+count+'</span></button>'; }
+  function chip(id,name,count,active){
+    return '<li class="cat-item"><button class="cat-btn'+(active?" active":"")+'" data-cat="'+id+'"><span>'+esc(name)+'</span><span class="count">'+count+'</span></button></li>';
+  }
 
   function renderPills(){
     var box=document.getElementById("activePills"); var html="";
@@ -497,15 +522,13 @@
     box.innerHTML=html;
   }
 
-  function renderToolbar(){
-    var sel=document.getElementById("sortSel"); if(sel.value!==ui.sort) sel.value=ui.sort;
-    // 常用标签
+  function renderTags(){
     var bar=document.getElementById("tagbar"); var freq={};
     state.items.forEach(function(it){ it.tags.forEach(function(t){ freq[t]=(freq[t]||0)+1; }); });
-    var tags=Object.keys(freq).sort(function(a,b){ return freq[b]-freq[a]; }).slice(0,10);
+    var tags=Object.keys(freq).sort(function(a,b){ return a.localeCompare(b,"zh"); }); // 拼音 A→Z
     if(!tags.length){ bar.innerHTML=""; bar.style.display="none"; return; }
     bar.style.display="flex";
-    bar.innerHTML='<span class="tlabel">常用标签</span>'+tags.map(function(t){
+    bar.innerHTML='<span class="tlabel">标签</span>'+tags.map(function(t){
       return '<span class="tchip'+(ui.tag===t?" on":"")+'" data-tagfilter="'+esc(t)+'">'+esc(t)+'</span>'; }).join("");
   }
 
@@ -515,27 +538,29 @@
     if(visible.length===0){ root.innerHTML=emptyState("没有匹配的资料","换个搜索词，或清掉上方的筛选。"); return; }
     var html="";
     if(ui.activeCat==="all"){
-      state.cats.forEach(function(c){ var arr=visible.filter(function(it){return it.cat===c.id;}); if(arr.length) html+=groupHTML(c.name,arr); });
+      catsSorted().forEach(function(c){ var arr=visible.filter(function(it){return it.cat===c.id;}); if(arr.length) html+=groupHTML(c.name,arr); });
       var none=visible.filter(function(it){return !it.cat||!catName(it.cat);}); if(none.length) html+=groupHTML("未归类",none);
     } else if(ui.activeCat==="__none"){ html+=cardsHTML(visible.filter(function(it){return !it.cat||!catName(it.cat);})); }
     else { html+=cardsHTML(visible.filter(function(it){return it.cat===ui.activeCat;})); }
     root.innerHTML=html;
   }
   function groupHTML(name,arr){ return '<section class="group"><h2 class="group-title">'+esc(name)+' <span class="gc">'+arr.length+'</span></h2>'+cardsHTML(arr)+'</section>'; }
-  function cardsHTML(arr){ return '<div class="cards'+(ui.sort==="added"?" dragmode":"")+'">'+sortItems(arr).map(cardHTML).join("")+'</div>'; }
+  function cardsHTML(arr){ return '<div class="cards dragmode">'+arr.map(cardHTML).join("")+'</div>'; }
   function cardHTML(it){
-    var open=canOpen(it);
-    var titleHTML='<div class="card-title'+(open?" clickable":"")+'"'+(open?' data-open="'+it.id+'"':'')+'>'+esc(it.title)+'</div>';
-    var sub=(it.kind==="file"&&it.fileName)?'<div class="link-line">📄 '+esc(it.fileName)+'<span class="badge-file">本地</span></div>'
+    var open=canOpen(it), exp=!!ui.expanded[it.id];
+    var badge=(it.kind==="file")?'<span class="badge-file">本地</span>':'';
+    var title='<div class="card-title clickable" data-ct="'+it.id+'"><span class="chev">▶</span><span class="ct-text">'+esc(it.title)+'</span>'+badge+'</div>';
+    var sub=(it.kind==="file"&&it.fileName)?'<div class="link-line">📄 '+esc(it.fileName)+'</div>'
            :(it.link?'<div class="link-line">'+esc(it.link)+'</div>':'');
     var meta='<div class="card-meta"><span>添加 '+fmtDate(it.created)+'</span>'+(it.kind==="file"&&it.size?'<span>'+fmtSize(it.size)+'</span>':'')+'</div>';
     var tags=it.tags.length?'<div class="tags">'+it.tags.map(function(t){return '<span class="tag" data-tag="'+esc(t)+'">'+esc(t)+'</span>';}).join("")+'</div>':'';
     var note=it.note?'<div class="note">'+esc(it.note)+'</div>':'';
-    var opts='<option value="">未归类</option>'+state.cats.map(function(c){ return '<option value="'+c.id+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("");
-    return '<div class="card" data-id="'+it.id+'">'+titleHTML+sub+note+tags+meta+
-      '<div class="card-foot"><select class="cat-select" data-move="'+it.id+'" title="归类到…">'+opts+'</select>'+
+    var opts='<option value="">未归类</option>'+catsSorted().map(function(c){ return '<option value="'+c.id+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("");
+    var foot='<div class="card-foot"><select class="cat-select" data-move="'+it.id+'" title="归类到…">'+opts+'</select>'+
       '<div class="spacer"></div>'+(open?'<button class="btn ghost sm" data-open="'+it.id+'">打开</button>':'')+
-      '<button class="btn ghost sm" data-edit="'+it.id+'">编辑</button></div></div>';
+      '<button class="btn ghost sm" data-edit="'+it.id+'">编辑</button></div>';
+    return '<div class="card'+(exp?" expanded":"")+'" data-id="'+it.id+'">'+title+
+      '<div class="collapsible">'+sub+note+tags+meta+foot+'</div></div>';
   }
   function emptyState(h,p){ return '<div class="empty"><h3>'+esc(h)+'</h3><p>'+esc(p)+'</p><button class="btn primary" id="emptyAdd">＋ 添加资料</button></div>'; }
 
@@ -551,7 +576,7 @@
     document.getElementById("modalTitle").textContent=item?"编辑资料":"添加资料";
     document.getElementById("deleteItem").style.display=item?"":"none";
     var sel=document.getElementById("fCat");
-    sel.innerHTML='<option value="">未归类</option>'+state.cats.map(function(c){return '<option value="'+c.id+'">'+esc(c.name)+'</option>';}).join("");
+    sel.innerHTML='<option value="">未归类</option>'+catsSorted().map(function(c){return '<option value="'+c.id+'">'+esc(c.name)+'</option>';}).join("");
     sel.value=item?(item.cat||""):(ui.activeCat!=="all"&&ui.activeCat!=="__none"?ui.activeCat:"");
     document.getElementById("fTitle").value=item?item.title:"";
     document.getElementById("fLink").value=(item&&item.kind==="link")?item.link:"";
@@ -586,19 +611,44 @@
   // ---------- categories ----------
   function addCategory(){ var inp=document.getElementById("newCatInput"); var name=inp.value.trim(); if(!name) return;
     state.cats.push({id:uid("c"),name:name}); inp.value=""; persist(); render(); }
-  function startRename(id){ ui.renamingCat=id; render(); }
-  function commitRename(){ var id=ui.renamingCat; if(!id) return; var inp=document.getElementById("renameInput"); if(!inp){ ui.renamingCat=null; return; }
-    var name=inp.value.trim(); ui.renamingCat=null; if(name){ var c=state.cats.find(function(x){return x.id===id;}); if(c) c.name=name; persist(); } render(); }
+  function renameCategory(id){ var c=state.cats.find(function(x){return x.id===id;}); if(!c) return;
+    var name=prompt("重命名分类", c.name); if(name===null) return; name=name.trim(); if(!name) return;
+    c.name=name; persist(); render(); renderCatPanel(); }
   function deleteCategory(id){ var c=state.cats.find(function(x){return x.id===id;}); if(!c) return;
     var n=countIn(id); var msg=n>0?('删除分类「'+c.name+'」？其中 '+n+' 条资料会移到「未归类」。'):('删除分类「'+c.name+'」？');
     if(!confirm(msg)) return; state.items.forEach(function(it){ if(it.cat===id) it.cat=null; });
-    state.cats=state.cats.filter(function(x){return x.id!==id;}); if(ui.activeCat===id) ui.activeCat="all"; persist(); render(); }
+    state.cats=state.cats.filter(function(x){return x.id!==id;}); if(ui.activeCat===id) ui.activeCat="all"; persist(); render(); renderCatPanel(); }
 
-  // ---------- 长按拖动排序 ----------
+  // 更多分类面板
+  function openCatPanel(){ renderCatPanel(); document.getElementById("catPanelOv").classList.add("open"); }
+  function closeCatPanel(){ document.getElementById("catPanelOv").classList.remove("open"); }
+  function renderCatPanel(){
+    var box=document.getElementById("catPanelList"); var html="";
+    html+=panelRow("all","全部",state.items.length,false);
+    catsSorted().forEach(function(c){ html+=panelRow(c.id,c.name,countIn(c.id),true); });
+    if(uncatCount()>0) html+=panelRow("__none","未归类",uncatCount(),false);
+    box.innerHTML=html;
+  }
+  function panelRow(id,name,count,manage){
+    return '<div class="cat-row"><span class="nm" data-pickcat="'+id+'">'+esc(name)+'</span><span class="cnt">'+count+'</span>'+
+      (manage?'<button class="ic" data-prename="'+id+'" title="重命名">✎</button><button class="ic" data-predel="'+id+'" title="删除">🗑</button>':'')+'</div>';
+  }
+
+  // 长按分类 -> 动作菜单
+  function openCatActions(id){ var c=state.cats.find(function(x){return x.id===id;}); if(!c) return;
+    ui.caId=id; document.getElementById("caName").textContent="分类：「"+c.name+"」";
+    document.getElementById("catActionsOv").classList.add("open"); }
+  function closeCatActions(){ document.getElementById("catActionsOv").classList.remove("open"); ui.caId=null; }
+
+  // ---------- 卡片折叠 ----------
+  function toggleExpand(id,cardEl){ if(ui.expanded[id]){ delete ui.expanded[id]; cardEl.classList.remove("expanded"); }
+    else { ui.expanded[id]=true; cardEl.classList.add("expanded"); } }
+
+  // ---------- 长按拖动排序（资料）----------
   function reorder(dragId,targetId,after){
     if(dragId===targetId) return;
-    var di=state.items.findIndex(function(x){return x.id===dragId;});
-    if(di<0) return; var moved=state.items.splice(di,1)[0];
+    var di=state.items.findIndex(function(x){return x.id===dragId;}); if(di<0) return;
+    var moved=state.items.splice(di,1)[0];
     var ti=state.items.findIndex(function(x){return x.id===targetId;});
     if(ti<0){ state.items.push(moved); } else { state.items.splice(after?ti+1:ti,0,moved); }
     persist(); render();
@@ -608,14 +658,13 @@
     var dragging=null, timer=null, startX=0, startY=0, lastTarget=null, lastAfter=false;
     function clearMarks(){ var els=content.querySelectorAll(".card.dragover"); for(var i=0;i<els.length;i++) els[i].classList.remove("dragover"); }
     content.addEventListener("pointerdown", function(e){
-      if(ui.sort!=="added") return; if(e.button&&e.button!==0) return;
+      cardSuppress=false; if(e.button&&e.button!==0) return;
       if(e.target.closest("button,select,a,.tag,[data-open],[data-edit],[data-move],[data-tag]")) return;
       var card=e.target.closest(".card"); if(!card) return;
       startX=e.clientX; startY=e.clientY;
-      timer=setTimeout(function(){
-        dragging=card; card.classList.add("dragging"); document.body.style.touchAction="none";
+      timer=setTimeout(function(){ dragging=card; card.classList.add("dragging"); document.body.style.touchAction="none";
         try{ content.setPointerCapture(e.pointerId); }catch(_){}
-      },330);
+      },320);
     });
     content.addEventListener("pointermove", function(e){
       if(!dragging){ if(timer && (Math.abs(e.clientX-startX)>8||Math.abs(e.clientY-startY)>8)){ clearTimeout(timer); timer=null; } return; }
@@ -628,11 +677,25 @@
     });
     function end(){ if(timer){ clearTimeout(timer); timer=null; }
       if(dragging){ dragging.classList.remove("dragging"); clearMarks(); document.body.style.touchAction="";
-        var dragId=dragging.getAttribute("data-id"); dragging=null;
+        var dragId=dragging.getAttribute("data-id"); dragging=null; cardSuppress=true;
         if(lastTarget){ reorder(dragId,lastTarget,lastAfter); } lastTarget=null; }
     }
     content.addEventListener("pointerup", end);
     content.addEventListener("pointercancel", end);
+  }
+
+  // ---------- 长按分类胶囊 ----------
+  function enableChipLongPress(){
+    var list=document.getElementById("catList"); var timer=null, sx=0, sy=0;
+    list.addEventListener("pointerdown", function(e){
+      chipSuppress=false; var btn=e.target.closest("[data-cat]"); if(!btn) return;
+      var id=btn.getAttribute("data-cat"); if(id==="all"||id==="__none") return;
+      sx=e.clientX; sy=e.clientY;
+      timer=setTimeout(function(){ chipSuppress=true; openCatActions(id); },480);
+    });
+    list.addEventListener("pointermove", function(e){ if(timer && (Math.abs(e.clientX-sx)>8||Math.abs(e.clientY-sy)>8)){ clearTimeout(timer); timer=null; } });
+    function clr(){ if(timer){ clearTimeout(timer); timer=null; } }
+    list.addEventListener("pointerup", clr); list.addEventListener("pointercancel", clr);
   }
 
   // ---------- events ----------
@@ -641,7 +704,7 @@
     document.getElementById("newCatBtn").addEventListener("click",addCategory);
     document.getElementById("newCatInput").addEventListener("keydown",function(e){ if(e.key==="Enter") addCategory(); });
     document.getElementById("search").addEventListener("input",function(e){ ui.search=e.target.value; render(); });
-    document.getElementById("sortSel").addEventListener("change",function(e){ ui.sort=e.target.value; render(); });
+    document.getElementById("moreCatBtn").addEventListener("click",openCatPanel);
 
     var moreBtn=document.getElementById("moreBtn"), moreMenu=document.getElementById("moreMenu");
     moreBtn.addEventListener("click",function(e){ e.stopPropagation(); moreMenu.classList.toggle("open"); });
@@ -655,7 +718,7 @@
     document.getElementById("saveItem").addEventListener("click",saveFromModal);
     document.getElementById("deleteItem").addEventListener("click",deleteCurrent);
     document.getElementById("overlay").addEventListener("click",function(e){ if(e.target.id==="overlay") closeModal(); });
-    document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closeModal(); closeViewer(); } });
+    document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ closeModal(); closeViewer(); closeCatPanel(); closeCatActions(); } });
 
     document.getElementById("pickFile").addEventListener("click",function(){ document.getElementById("fileInput").click(); });
     document.getElementById("fileInput").addEventListener("change",function(){
@@ -674,18 +737,35 @@
       ui.tag=(ui.tag===tag)?null:tag; render();
     });
 
+    // 分类胶囊：点选 / 长按
     document.getElementById("catList").addEventListener("click",function(e){
-      var ok=e.target.closest("[data-renameok]"); if(ok){ commitRename(); return; }
-      var r=e.target.closest("[data-rename]"); if(r){ startRename(r.getAttribute("data-rename")); return; }
-      var d=e.target.closest("[data-delcat]"); if(d){ deleteCategory(d.getAttribute("data-delcat")); return; }
-      var b=e.target.closest("[data-cat]"); if(b){ ui.activeCat=b.getAttribute("data-cat"); render(); return; }
+      if(chipSuppress){ chipSuppress=false; return; }
+      var b=e.target.closest("[data-cat]"); if(b){ ui.activeCat=b.getAttribute("data-cat"); render(); }
+    });
+    enableChipLongPress();
+
+    // 更多分类面板
+    document.getElementById("catPanelClose").addEventListener("click",closeCatPanel);
+    document.getElementById("catPanelOv").addEventListener("click",function(e){ if(e.target.id==="catPanelOv") closeCatPanel(); });
+    document.getElementById("catPanelList").addEventListener("click",function(e){
+      var pk=e.target.closest("[data-pickcat]"); if(pk){ ui.activeCat=pk.getAttribute("data-pickcat"); closeCatPanel(); render(); return; }
+      var rn=e.target.closest("[data-prename]"); if(rn){ renameCategory(rn.getAttribute("data-prename")); return; }
+      var dl=e.target.closest("[data-predel]"); if(dl){ deleteCategory(dl.getAttribute("data-predel")); return; }
     });
 
+    // 长按动作菜单
+    document.getElementById("caRename").addEventListener("click",function(){ var id=ui.caId; closeCatActions(); if(id) renameCategory(id); });
+    document.getElementById("caDelete").addEventListener("click",function(){ var id=ui.caId; closeCatActions(); if(id) deleteCategory(id); });
+    document.getElementById("caCancel").addEventListener("click",closeCatActions);
+    document.getElementById("catActionsOv").addEventListener("click",function(e){ if(e.target.id==="catActionsOv") closeCatActions(); });
+
+    // 卡片区：折叠 / 打开 / 编辑 / 标签
     document.getElementById("content").addEventListener("click",function(e){
       var ea=e.target.closest("#emptyAdd"); if(ea){ openModal(null); return; }
       var op=e.target.closest("[data-open]"); if(op){ e.preventDefault(); var it=byId(op.getAttribute("data-open")); if(it) openItem(it); return; }
       var ed=e.target.closest("[data-edit]"); if(ed){ var i2=byId(ed.getAttribute("data-edit")); if(i2) openModal(i2); return; }
       var tg=e.target.closest("[data-tag]"); if(tg){ ui.tag=tg.getAttribute("data-tag"); render(); return; }
+      var ct=e.target.closest(".card-title"); if(ct){ if(cardSuppress){ cardSuppress=false; return; } toggleExpand(ct.getAttribute("data-ct"), ct.closest(".card")); return; }
     });
     document.getElementById("content").addEventListener("change",function(e){
       var mv=e.target.closest("[data-move]"); if(mv){ var it=byId(mv.getAttribute("data-move")); if(it){ it.cat=mv.value||null; it.updated=Date.now(); persist(); render(); } }

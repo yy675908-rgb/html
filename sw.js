@@ -1,4 +1,4 @@
-const CACHE = 'study-org-v6';
+const CACHE = 'study-org-v7';
 const SHELL = ['./','index.html','manifest.json','icon-192.png','icon-512.png'];   // 外壳：必定存在
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
