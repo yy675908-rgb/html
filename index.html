@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>学习资料 · 归类</title>
+<title>HTML 归档</title>
 <style>
   :root{
     --ink:#21302f; --ink-soft:#47575b; --muted:#8b948e;
@@ -83,13 +83,13 @@
   .rail-head span{font-size:12px; letter-spacing:.12em; color:var(--muted); text-transform:none;}
   .cat-list{list-style:none; margin:0; padding:0;}
   .cat-item{display:flex; align-items:center; gap:6px; margin:1px 0;}
-  .cat-btn{flex:1; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  .cat-btn{flex:1; display:flex; align-items:center; justify-content:space-between; gap:6px;
     border:none; background:transparent; text-align:left; cursor:pointer;
-    padding:8px 11px; border-radius:8px; font-size:14.5px; color:var(--ink-soft);
+    padding:6px 10px; border-radius:8px; font-size:13.5px; color:var(--ink-soft);
     border-left:3px solid transparent; transition:background .12s, color .12s;}
   .cat-btn:hover{background:var(--line-soft);}
-  .cat-btn .count{font-size:12px; color:var(--muted); background:var(--line-soft);
-    padding:1px 8px; border-radius:20px; min-width:20px; text-align:center;}
+  .cat-btn .count{font-size:11px; color:var(--muted); background:var(--line-soft);
+    padding:0 6px; border-radius:20px; min-width:16px; text-align:center;}
   .cat-btn.active{background:var(--celadon-soft); color:var(--pine-2); font-weight:600;
     border-left-color:var(--celadon);}
   .cat-btn.active .count{background:#dcebe4; color:var(--pine-2);}
@@ -147,20 +147,20 @@
   .overlay.open{display:flex;}
   .modal{background:var(--card); border-radius:14px; width:100%; max-width:480px;
     box-shadow:0 12px 40px rgba(20,40,35,.22); max-height:90vh; overflow:auto;}
-  .modal-head{padding:18px 20px 4px;}
-  .modal-head h2{font-family:var(--serif); font-size:19px; color:var(--pine-2); margin:0;}
-  .modal-body{padding:14px 20px 4px;}
-  .field{margin-bottom:14px;}
-  .field label{display:block; font-size:12.5px; color:var(--ink-soft); margin-bottom:5px; font-weight:600;}
+  .modal-head{padding:14px 18px 2px;}
+  .modal-head h2{font-family:var(--serif); font-size:18px; color:var(--pine-2); margin:0;}
+  .modal-body{padding:10px 18px 2px;}
+  .field{margin-bottom:9px;}
+  .field label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:3px; font-weight:600;}
   .field input[type=text], .field textarea, .field select{
-    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 11px;
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:7px 10px;
     font-size:14px; font-family:inherit; background:#fff; color:var(--ink);}
   .field input:focus, .field textarea:focus, .field select:focus{outline:none; border-color:var(--celadon);}
-  .field textarea{min-height:84px; resize:vertical; line-height:1.6;}
+  .field textarea{min-height:50px; resize:vertical; line-height:1.5;}
   .field .hint{font-size:11.5px; color:var(--muted); margin-top:5px;}
   .link-row{display:flex; gap:8px;}
   .link-row input{flex:1;}
-  .modal-foot{padding:12px 20px 18px; display:flex; gap:9px; justify-content:flex-end; align-items:center;}
+  .modal-foot{padding:10px 18px 14px; display:flex; gap:9px; justify-content:flex-end; align-items:center;}
   .modal-foot .spacer{flex:1;}
 
   /* file input hidden */
@@ -184,7 +184,7 @@
     .rail{position:static;}
     .cat-list{display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch; min-width:0; max-width:100%;}
     .cat-item{flex:0 0 auto;}
-    .cat-btn{border-left:none; border:1px solid var(--line); border-radius:20px; padding:7px 13px;}
+    .cat-btn{border-left:none; border:1px solid var(--line); border-radius:18px; padding:5px 11px; font-size:13px;}
     .cat-btn.active{border-color:var(--celadon);}
     .cat-edit{display:none !important;}
     .add-cat{margin-top:0;}
@@ -192,6 +192,27 @@
     .cards{grid-template-columns:1fr;}
     .brand h1{font-size:22px;}
   }
+  /* 卡片元信息：日期 + 大小 */
+  .card-meta{font-size:11.5px;color:var(--muted);margin:0 0 8px;display:flex;gap:10px;flex-wrap:wrap;}
+  /* 常用标签筛选行 */
+  .tagbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:2px 0 4px;}
+  .tagbar .tlabel{font-size:11.5px;color:var(--muted);margin-right:2px;}
+  .tagbar .tchip{font-size:12px;color:var(--pine-2);background:var(--celadon-soft);border:1px solid transparent;border-radius:14px;padding:3px 10px;cursor:pointer;}
+  .tagbar .tchip:hover{background:#dceae3;}
+  .tagbar .tchip.on{background:var(--pine);color:#fff;}
+  /* 排序控件 */
+  .sortbar{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);}
+  .sortbar select{font-size:12.5px;border:1px solid var(--line);border-radius:7px;padding:4px 6px;background:var(--card);color:var(--ink-soft);cursor:pointer;}
+  .sortbar select:focus{outline:none;border-color:var(--celadon);}
+  /* 就地重命名分类 */
+  .cat-rename{display:flex;align-items:center;gap:6px;}
+  .cat-rename input{border:1px solid var(--celadon);border-radius:8px;padding:5px 9px;font-size:13.5px;max-width:130px;}
+  .cat-rename input:focus{outline:none;}
+  .cat-rename .ok{border:none;background:var(--pine);color:#fff;border-radius:7px;padding:5px 9px;font-size:13px;cursor:pointer;}
+  /* 长按拖动排序 */
+  .card.dragging{opacity:.45;}
+  .card.dragover{box-shadow:0 0 0 2px var(--celadon);}
+  .cards.dragmode .card{cursor:grab;}
   @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
 </style>
 <link rel="manifest" href="manifest.json">
@@ -199,15 +220,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="学习归类">
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAADiUlEQVR4nO3cIXIcVxRA0VYqSwgKzRa0DVcJmIkEGBkFBhkYBRoZGWQBYV6gglypSlLSyLam//v3nBW8+f3u9EyPSje393cPB0T9cPYAcCYBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpP549wHN9eP/+7BH+47d3784ega90c3t/93D2EJdYcfH/TQjzjPgINGH5j2POnPxj+QCmLdW0eeuWDmDqMk2du2jpAOClLRvA9HfR6fNXLBsAXIMASBv3Q9gvP/189ggX+/zx09kjnOLV2zdnj3CxMQFMWvy6L+FPCGHERyDLP9OEO+DyAVj+2VaPYOkALP8eVo5g6QDgpS0bgHf/vax6F1g2ALgGAZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBMAaQIgTQCkCYA0AZAmANIEQJoASBvzrxG/1h9//Xn2CKP9/vrXs0d4UVvfASz/t9v9DLcNYPcLd007n+W2AcAlBEDatgHs/uXtmnY+y20DOI69L9y17H6G2z8G3f0C8m22vgPAUwRAmgBIEwBpAiBt+6dAO/+M/xhPvy6z9R2guvzH0X7tz7FtABbAGVxi2wDgEgIgbdsAfAl0BpfYNoDjaC9A+bU/x/aPQS0Cj9n6DgBPEQBpAiBNAKQJgLTtnwJN+3MAT62ua+s7wLTlP46ZM0+2bQCTF2ny7NNsGwBcQgCkbRvA5C+Tk2efZtsAjmPmIk2cebLtH4NaKB6z9R0AniIA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0gRAmgBIEwBpAiBNAKQJgDQBkCYA0pYN4NXbN2ePwHe06vVcNgC4hqUDWPVdg+dZ+TouHcBxrH14PG3167d8AMex/iHy/yZct5vb+7uHs4d4js8fP509Ak+YsPhfjAsAvqcRH4HgpQiANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApAmANAGQJgDSBECaAEgTAGkCIE0ApP0NRZBnfePrgncAAAAASUVORK5CYII=">
+<meta name="apple-mobile-web-app-title" content="HTML 归档">
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <div class="app">
   <header class="top">
     <div class="brand">
-      <h1><span class="bar"></span>学习资料 · 归类</h1>
-      <p>把笔记和 HTML 资料按分类收好，随手能找、随手能开</p>
+      <h1><span class="bar"></span>HTML 归档</h1>
     </div>
     <div class="top-actions">
       <button class="btn primary" id="addBtn">＋ 添加资料</button>
@@ -239,7 +259,15 @@
     <main class="main">
       <div class="main-head">
         <div class="active-pills" id="activePills"></div>
+        <div class="sortbar" id="sortbar">
+          <span>排序</span>
+          <select id="sortSel">
+            <option value="added">按添加时间</option>
+            <option value="title">按标题</option>
+          </select>
+        </div>
       </div>
+      <div class="tagbar" id="tagbar"></div>
       <div id="content"></div>
     </main>
   </div>
@@ -259,25 +287,23 @@
         <select id="fCat"></select>
       </div>
       <div class="field">
-        <label>文件（从手机选，存进 App）</label>
+        <label>文件</label>
         <div class="link-row">
           <button class="btn sm" id="pickFile" type="button">📄 选文件</button>
           <span id="fileChosen" class="file-chosen"></span>
           <input class="hidden-file" id="fileInput" type="file" accept=".html,.htm,text/html">
         </div>
-        <div class="hint">选一个 HTML 文件，它会存进 App 内部，离线也能打开，不用上传 GitHub。</div>
       </div>
       <div class="field">
-        <label for="fLink">或网址（可空）</label>
-        <input id="fLink" type="text" placeholder="https:// 开头的链接，可不填">
-        <div class="hint">没选文件时可填一个网址；都留空就是纯笔记。</div>
+        <label for="fLink">或网址</label>
+        <input id="fLink" type="text" placeholder="https:// 开头的链接">
       </div>
       <div class="field">
-        <label for="fTags">标签（可空，逗号分隔）</label>
+        <label for="fTags">标签（逗号分隔）</label>
         <input id="fTags" type="text" placeholder="面神经, 牵正散">
       </div>
       <div class="field">
-        <label for="fNote">备注 / 笔记（可空）</label>
+        <label for="fNote">备注 / 笔记</label>
         <textarea id="fNote" placeholder="写点要点、待补、心得…"></textarea>
       </div>
     </div>
@@ -295,7 +321,7 @@
   <div class="viewer-bar">
     <button id="viewerClose">← 返回</button>
     <span class="vtitle" id="viewerTitle"></span>
-    <button id="viewerNewTab">新标签打开</button>
+    <button id="viewerExport">⬇ 导出</button>
   </div>
   <iframe id="viewerFrame" referrerpolicy="no-referrer"></iframe>
 </div>
@@ -311,31 +337,26 @@
   var LS_KEY = "studyOrg_v2";
   var DB_NAME = "studyOrgDB", DB_STORE = "docs";
   var state = load();
-  var ui = { activeCat:"all", search:"", tag:null, editingId:null, _editFile:"" };
-  var pendingDoc = null;          // {name, content} staged from picker
-  var pendingRemoveFile = false;  // editing: user removed existing file
-  var viewerURL = null;
+  var ui = { activeCat:"all", search:"", tag:null, editingId:null, _editFile:"", sort:"added", renamingCat:null };
+  var pendingDoc = null, pendingRemoveFile = false, viewerURL = null, currentViewItem = null;
 
   function val(id){ return document.getElementById(id).value; }
   function byId(id){ return state.items.find(function(x){return x.id===id;}); }
 
   // ---------- IndexedDB ----------
-  function idb(){
-    return new Promise(function(res, rej){
-      var r = indexedDB.open(DB_NAME, 1);
-      r.onupgradeneeded = function(){ var db=r.result; if(!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE,{keyPath:"key"}); };
-      r.onsuccess = function(){ res(r.result); };
-      r.onerror   = function(){ rej(r.error); };
-    });
-  }
-  function docPut(key,name,content){ return idb().then(function(db){ return new Promise(function(res,rej){
-    var tx=db.transaction(DB_STORE,"readwrite"); tx.objectStore(DB_STORE).put({key:key,name:name,content:content});
+  function idb(){ return new Promise(function(res,rej){
+    var r=indexedDB.open(DB_NAME,1);
+    r.onupgradeneeded=function(){ var db=r.result; if(!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE,{keyPath:"key"}); };
+    r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); };
+  }); }
+  function docPut(k,n,c){ return idb().then(function(db){ return new Promise(function(res,rej){
+    var tx=db.transaction(DB_STORE,"readwrite"); tx.objectStore(DB_STORE).put({key:k,name:n,content:c});
     tx.oncomplete=function(){res();}; tx.onerror=function(){rej(tx.error);}; }); }); }
-  function docGet(key){ return idb().then(function(db){ return new Promise(function(res,rej){
-    var g=db.transaction(DB_STORE,"readonly").objectStore(DB_STORE).get(key);
+  function docGet(k){ return idb().then(function(db){ return new Promise(function(res,rej){
+    var g=db.transaction(DB_STORE,"readonly").objectStore(DB_STORE).get(k);
     g.onsuccess=function(){res(g.result||null);}; g.onerror=function(){rej(g.error);}; }); }); }
-  function docDel(key){ return idb().then(function(db){ return new Promise(function(res){
-    var tx=db.transaction(DB_STORE,"readwrite"); tx.objectStore(DB_STORE).delete(key);
+  function docDel(k){ return idb().then(function(db){ return new Promise(function(res){
+    var tx=db.transaction(DB_STORE,"readwrite"); tx.objectStore(DB_STORE).delete(k);
     tx.oncomplete=function(){res();}; tx.onerror=function(){res();}; }); }); }
   function docAll(){ return idb().then(function(db){ return new Promise(function(res,rej){
     var g=db.transaction(DB_STORE,"readonly").objectStore(DB_STORE).getAll();
@@ -344,7 +365,7 @@
     var tx=db.transaction(DB_STORE,"readwrite"); tx.objectStore(DB_STORE).clear();
     tx.oncomplete=function(){res();}; tx.onerror=function(){res();}; }); }); }
 
-  // ---------- state persistence ----------
+  // ---------- state ----------
   function load(){
     try{ var raw=localStorage.getItem(LS_KEY); if(raw){ var s=JSON.parse(raw); if(s&&s.items) return normalize(s); } }catch(e){}
     try{ return normalize(JSON.parse(document.getElementById("__seed").textContent)); }catch(e){ return {v:2,cats:[],items:[]}; }
@@ -353,8 +374,8 @@
     s.v=2; s.cats=s.cats||[]; s.items=s.items||[];
     s.items.forEach(function(it){
       it.tags=it.tags||[]; it.link=it.link||""; it.note=it.note||"";
-      if(!it.kind){ it.kind = it.docKey ? "file" : (it.link ? "link" : "note"); }
-      it.fileName=it.fileName||"";
+      if(!it.kind){ it.kind=it.docKey?"file":(it.link?"link":"note"); }
+      it.fileName=it.fileName||""; it.size=it.size||0; it.created=it.created||Date.now();
     });
     return s;
   }
@@ -362,28 +383,16 @@
   function uid(p){ return (p||"id")+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 
   // ---------- backup ----------
-  function exportBackup(){
-    docAll().then(function(docs){
-      download(JSON.stringify({app:"study-organizer",v:2,state:state,docs:docs}), "学习归类_备份.json", "application/json");
-    });
-  }
+  function exportBackup(){ docAll().then(function(docs){ download(JSON.stringify({app:"html-archive",v:2,state:state,docs:docs}),"HTML归档_备份.json","application/json"); }); }
   function importBackup(){
     var inp=document.createElement("input"); inp.type="file"; inp.accept=".json,application/json";
-    inp.onchange=function(){
-      var f=inp.files[0]; if(!f) return;
-      var rd=new FileReader();
-      rd.onload=function(){
-        try{
-          var p=JSON.parse(rd.result); var st=p.state||p;
-          if(!st||!st.items) throw 0;
-          if(!confirm("用备份替换当前全部内容（含资料）？")) return;
-          var w=Promise.resolve();
-          if(p.docs&&p.docs.length){ w=docClear().then(function(){ return Promise.all(p.docs.map(function(d){return docPut(d.key,d.name,d.content);})); }); }
-          w.then(function(){ state=normalize(st); persist(); render(); alert("已导入。"); });
-        }catch(e){ alert("读不出来，请确认是本工具导出的备份文件。"); }
-      };
-      rd.readAsText(f);
-    };
+    inp.onchange=function(){ var f=inp.files[0]; if(!f) return; var rd=new FileReader();
+      rd.onload=function(){ try{ var p=JSON.parse(rd.result); var st=p.state||p; if(!st||!st.items) throw 0;
+        if(!confirm("用备份替换当前全部内容（含资料）？")) return;
+        var w=Promise.resolve(); if(p.docs&&p.docs.length){ w=docClear().then(function(){ return Promise.all(p.docs.map(function(d){return docPut(d.key,d.name,d.content);})); }); }
+        w.then(function(){ state=normalize(st); persist(); render(); alert("已导入。"); });
+      }catch(e){ alert("读不出来，请确认是本工具导出的备份文件。"); } };
+      rd.readAsText(f); };
     inp.click();
   }
   function resetAll(){
@@ -391,68 +400,95 @@
     if(!confirm("再确认一次：真的清空并重来吗？")) return;
     docClear().then(function(){ try{ localStorage.removeItem(LS_KEY); }catch(e){} location.reload(); });
   }
-  function download(text,name,type){
-    var blob=new Blob([text],{type:type+";charset=utf-8"}); var url=URL.createObjectURL(blob);
-    var a=document.createElement("a"); a.href=url; a.download=name;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    setTimeout(function(){ URL.revokeObjectURL(url); },2000);
-  }
+  function download(text,name,type){ var blob=new Blob([text],{type:type+";charset=utf-8"}); var url=URL.createObjectURL(blob);
+    var a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); },2000); }
 
   // ---------- helpers ----------
   function catName(id){ var c=state.cats.find(function(x){return x.id===id;}); return c?c.name:null; }
   function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
-  function countIn(catId){ return state.items.filter(function(it){return it.cat===catId;}).length; }
+  function countIn(id){ return state.items.filter(function(it){return it.cat===id;}).length; }
   function uncatCount(){ return state.items.filter(function(it){return !it.cat||!catName(it.cat);}).length; }
+  function canOpen(it){ return (it.kind==="file"&&it.docKey)||(it.kind==="link"&&it.link); }
   function matches(it){
     if(ui.tag && it.tags.indexOf(ui.tag)===-1) return false;
     var q=ui.search.trim().toLowerCase(); if(!q) return true;
     return (it.title+" "+it.note+" "+it.tags.join(" ")+" "+it.fileName).toLowerCase().indexOf(q)!==-1;
   }
-  function canOpen(it){ return (it.kind==="file"&&it.docKey) || (it.kind==="link"&&it.link); }
+  function fmtDate(ts){ var d=new Date(ts||Date.now()),p=function(n){return(n<10?'0':'')+n;}; return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate()); }
+  function fmtSize(b){ if(!b) return ""; if(b<1024) return b+" B"; if(b<1048576) return (b/1024).toFixed(0)+" KB"; return (b/1048576).toFixed(1)+" MB"; }
+  function sortItems(arr){
+    if(ui.sort==="title"){ return arr.slice().sort(function(a,b){ return (a.title||"").localeCompare(b.title||"","zh"); }); }
+    return arr; // 添加时间 = 数组顺序（最新在前 / 可拖动）
+  }
 
   // ---------- open document ----------
   function openItem(it){
     if(it.kind==="file" && it.docKey){
-      docGet(it.docKey).then(function(d){
-        if(!d){ alert("这条资料的文件没找到（可能被清空过）。请「编辑」重新选一次文件。"); return; }
-        showViewer(it.title, d.content);
+      docGet(it.docKey).then(function(d){ if(!d){ alert("这条资料的文件没找到（可能被清空过）。请「编辑」重新选一次文件。"); return; }
+        currentViewItem=it; showViewer(it.title,d.content);
       }).catch(function(){ alert("打开失败。"); });
-    } else if(it.link){
-      window.open(it.link,"_blank","noopener");
-    }
+    } else if(it.link){ window.open(it.link,"_blank","noopener"); }
   }
-  function showViewer(title, html){
+  function showViewer(title,html){
     var v=document.getElementById("viewer"), frame=document.getElementById("viewerFrame");
     if(viewerURL){ URL.revokeObjectURL(viewerURL); viewerURL=null; }
     viewerURL=URL.createObjectURL(new Blob([html],{type:"text/html"}));
-    document.getElementById("viewerTitle").textContent=title||"";
-    frame.src=viewerURL; v.classList.add("open");
+    document.getElementById("viewerTitle").textContent=title||""; frame.src=viewerURL; v.classList.add("open");
   }
   function closeViewer(){
     var v=document.getElementById("viewer"), frame=document.getElementById("viewerFrame");
-    v.classList.remove("open"); frame.src="about:blank";
+    v.classList.remove("open"); frame.src="about:blank"; currentViewItem=null;
     if(viewerURL){ URL.revokeObjectURL(viewerURL); viewerURL=null; }
   }
+  function viewerExport(){
+    var it=currentViewItem; if(!it) return; var done=false;
+    function fin(html){ if(done) return; done=true; window.removeEventListener("message",onmsg);
+      download(html,(it.fileName||it.title||"资料").replace(/[\/:*?"<>|]/g,"")+".html","text/html"); }
+    function onmsg(e){ if(e.data&&e.data.type==="doc-html") fin(e.data.html); }
+    window.addEventListener("message",onmsg);
+    try{ document.getElementById("viewerFrame").contentWindow.postMessage({type:"request-html"},"*"); }catch(_){}
+    setTimeout(function(){ if(!done && it.docKey){ docGet(it.docKey).then(function(d){ if(d) fin(d.content); }); } },500);
+  }
+  // 文档内点“保存” -> 回写 App 的 IndexedDB
+  window.addEventListener("message", function(e){
+    if(!e.data) return;
+    if(e.data.type==="doc-save" && currentViewItem && currentViewItem.docKey){
+      var html=e.data.html, sz=0; try{ sz=new Blob([html]).size; }catch(_){ sz=html.length; }
+      docPut(currentViewItem.docKey, currentViewItem.fileName||"", html).then(function(){
+        currentViewItem.size=sz; currentViewItem.updated=Date.now(); persist();
+      });
+    }
+  });
 
   // ---------- render ----------
-  function render(){ renderRail(); renderPills(); renderContent(); }
+  function render(){ renderRail(); renderPills(); renderToolbar(); renderContent(); }
+
   function renderRail(){
     var list=document.getElementById("catList"); var html="";
     html+=railBtn("all","全部",state.items.length,ui.activeCat==="all");
     state.cats.forEach(function(c){
-      html+='<li class="cat-item">'+catBtnHTML(c.id,c.name,countIn(c.id),ui.activeCat===c.id)+
-        '<span class="cat-edit">'+
-          '<button class="icon-btn" data-rename="'+c.id+'" title="重命名">✎</button>'+
-          '<button class="icon-btn" data-delcat="'+c.id+'" title="删除分类">🗑</button>'+
-        '</span></li>';
+      if(ui.renamingCat===c.id){
+        html+='<li class="cat-item"><div class="cat-rename"><input id="renameInput" type="text" value="'+esc(c.name)+'"><button class="ok" data-renameok="'+c.id+'">✓</button></div></li>';
+      } else {
+        html+='<li class="cat-item">'+catBtnHTML(c.id,c.name,countIn(c.id),ui.activeCat===c.id)+
+          '<span class="cat-edit">'+
+            '<button class="icon-btn" data-rename="'+c.id+'" title="重命名">✎</button>'+
+            '<button class="icon-btn" data-delcat="'+c.id+'" title="删除分类">🗑</button>'+
+          '</span></li>';
+      }
     });
     if(uncatCount()>0) html+=railBtn("__none","未归类",uncatCount(),ui.activeCat==="__none");
     list.innerHTML=html;
+    var ri=document.getElementById("renameInput");
+    if(ri){ ri.focus(); ri.select();
+      ri.onkeydown=function(e){ if(e.key==="Enter") commitRename(); else if(e.key==="Escape"){ ui.renamingCat=null; render(); } };
+      ri.onblur=function(){ commitRename(); };
+    }
   }
   function railBtn(id,name,count,active){ return '<li class="cat-item">'+catBtnHTML(id,name,count,active)+'</li>'; }
-  function catBtnHTML(id,name,count,active){
-    return '<button class="cat-btn'+(active?" active":"")+'" data-cat="'+id+'"><span>'+esc(name)+'</span><span class="count">'+count+'</span></button>';
-  }
+  function catBtnHTML(id,name,count,active){ return '<button class="cat-btn'+(active?" active":"")+'" data-cat="'+id+'"><span>'+esc(name)+'</span><span class="count">'+count+'</span></button>'; }
+
   function renderPills(){
     var box=document.getElementById("activePills"); var html="";
     if(ui.activeCat!=="all"){ var nm=ui.activeCat==="__none"?"未归类":(catName(ui.activeCat)||"未归类");
@@ -460,6 +496,19 @@
     if(ui.tag){ html+='<span class="pill">标签：'+esc(ui.tag)+' <button data-clear="tag" title="清除">×</button></span>'; }
     box.innerHTML=html;
   }
+
+  function renderToolbar(){
+    var sel=document.getElementById("sortSel"); if(sel.value!==ui.sort) sel.value=ui.sort;
+    // 常用标签
+    var bar=document.getElementById("tagbar"); var freq={};
+    state.items.forEach(function(it){ it.tags.forEach(function(t){ freq[t]=(freq[t]||0)+1; }); });
+    var tags=Object.keys(freq).sort(function(a,b){ return freq[b]-freq[a]; }).slice(0,10);
+    if(!tags.length){ bar.innerHTML=""; bar.style.display="none"; return; }
+    bar.style.display="flex";
+    bar.innerHTML='<span class="tlabel">常用标签</span>'+tags.map(function(t){
+      return '<span class="tchip'+(ui.tag===t?" on":"")+'" data-tagfilter="'+esc(t)+'">'+esc(t)+'</span>'; }).join("");
+  }
+
   function renderContent(){
     var root=document.getElementById("content"); var visible=state.items.filter(matches);
     if(state.items.length===0){ root.innerHTML=emptyState("还没有资料","点「＋ 添加资料」，选一个手机里的 HTML 文件存进来。"); return; }
@@ -468,27 +517,24 @@
     if(ui.activeCat==="all"){
       state.cats.forEach(function(c){ var arr=visible.filter(function(it){return it.cat===c.id;}); if(arr.length) html+=groupHTML(c.name,arr); });
       var none=visible.filter(function(it){return !it.cat||!catName(it.cat);}); if(none.length) html+=groupHTML("未归类",none);
-    } else if(ui.activeCat==="__none"){
-      html+=cardsHTML(visible.filter(function(it){return !it.cat||!catName(it.cat);}));
-    } else {
-      html+=cardsHTML(visible.filter(function(it){return it.cat===ui.activeCat;}));
-    }
+    } else if(ui.activeCat==="__none"){ html+=cardsHTML(visible.filter(function(it){return !it.cat||!catName(it.cat);})); }
+    else { html+=cardsHTML(visible.filter(function(it){return it.cat===ui.activeCat;})); }
     root.innerHTML=html;
   }
   function groupHTML(name,arr){ return '<section class="group"><h2 class="group-title">'+esc(name)+' <span class="gc">'+arr.length+'</span></h2>'+cardsHTML(arr)+'</section>'; }
-  function cardsHTML(arr){ return '<div class="cards">'+arr.map(cardHTML).join("")+'</div>'; }
+  function cardsHTML(arr){ return '<div class="cards'+(ui.sort==="added"?" dragmode":"")+'">'+sortItems(arr).map(cardHTML).join("")+'</div>'; }
   function cardHTML(it){
     var open=canOpen(it);
     var titleHTML='<div class="card-title'+(open?" clickable":"")+'"'+(open?' data-open="'+it.id+'"':'')+'>'+esc(it.title)+'</div>';
-    var sub = (it.kind==="file"&&it.fileName) ? '<div class="link-line">📄 '+esc(it.fileName)+'<span class="badge-file">本地</span></div>'
-            : (it.link ? '<div class="link-line">'+esc(it.link)+'</div>' : '');
-    var tags = it.tags.length ? '<div class="tags">'+it.tags.map(function(t){return '<span class="tag" data-tag="'+esc(t)+'">'+esc(t)+'</span>';}).join("")+'</div>' : '';
-    var note = it.note ? '<div class="note">'+esc(it.note)+'</div>' : '';
+    var sub=(it.kind==="file"&&it.fileName)?'<div class="link-line">📄 '+esc(it.fileName)+'<span class="badge-file">本地</span></div>'
+           :(it.link?'<div class="link-line">'+esc(it.link)+'</div>':'');
+    var meta='<div class="card-meta"><span>添加 '+fmtDate(it.created)+'</span>'+(it.kind==="file"&&it.size?'<span>'+fmtSize(it.size)+'</span>':'')+'</div>';
+    var tags=it.tags.length?'<div class="tags">'+it.tags.map(function(t){return '<span class="tag" data-tag="'+esc(t)+'">'+esc(t)+'</span>';}).join("")+'</div>':'';
+    var note=it.note?'<div class="note">'+esc(it.note)+'</div>':'';
     var opts='<option value="">未归类</option>'+state.cats.map(function(c){ return '<option value="'+c.id+'"'+(c.id===it.cat?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("");
-    return '<div class="card" data-id="'+it.id+'">'+titleHTML+sub+note+tags+
+    return '<div class="card" data-id="'+it.id+'">'+titleHTML+sub+note+tags+meta+
       '<div class="card-foot"><select class="cat-select" data-move="'+it.id+'" title="归类到…">'+opts+'</select>'+
-      '<div class="spacer"></div>'+
-      (open?'<button class="btn ghost sm" data-open="'+it.id+'">打开</button>':'')+
+      '<div class="spacer"></div>'+(open?'<button class="btn ghost sm" data-open="'+it.id+'">打开</button>':'')+
       '<button class="btn ghost sm" data-edit="'+it.id+'">编辑</button></div></div>';
   }
   function emptyState(h,p){ return '<div class="empty"><h3>'+esc(h)+'</h3><p>'+esc(p)+'</p><button class="btn primary" id="emptyAdd">＋ 添加资料</button></div>'; }
@@ -496,12 +542,11 @@
   // ---------- modal ----------
   function refreshFileChosen(){
     var el=document.getElementById("fileChosen");
-    var name = pendingDoc ? pendingDoc.name : ((ui._editFile && !pendingRemoveFile) ? ui._editFile : "");
-    el.innerHTML = name ? (esc(name)+' <span class="x" id="removeFile">✕ 移除</span>') : "";
+    var name=pendingDoc?pendingDoc.name:((ui._editFile&&!pendingRemoveFile)?ui._editFile:"");
+    el.innerHTML=name?(esc(name)+' <span class="x" id="removeFile">✕ 移除</span>'):"";
   }
   function openModal(item){
-    ui.editingId=item?item.id:null;
-    pendingDoc=null; pendingRemoveFile=false;
+    ui.editingId=item?item.id:null; pendingDoc=null; pendingRemoveFile=false;
     ui._editFile=(item&&item.kind==="file")?(item.fileName||""):"";
     document.getElementById("modalTitle").textContent=item?"编辑资料":"添加资料";
     document.getElementById("deleteItem").style.display=item?"":"none";
@@ -512,42 +557,28 @@
     document.getElementById("fLink").value=(item&&item.kind==="link")?item.link:"";
     document.getElementById("fTags").value=item?item.tags.join(", "):"";
     document.getElementById("fNote").value=item?item.note:"";
-    refreshFileChosen();
-    document.getElementById("overlay").classList.add("open");
+    refreshFileChosen(); document.getElementById("overlay").classList.add("open");
   }
   function closeModal(){ document.getElementById("overlay").classList.remove("open"); ui.editingId=null; }
   function parseTags(s){ return (s||"").split(/[,，、\s]+/).map(function(t){return t.trim();}).filter(Boolean); }
-
   function saveFromModal(){
-    var title=val("fTitle").trim();
-    if(!title){ document.getElementById("fTitle").focus(); return; }
+    var title=val("fTitle").trim(); if(!title){ document.getElementById("fTitle").focus(); return; }
     var cat=val("fCat")||null, link=val("fLink").trim(), tags=parseTags(val("fTags")), note=val("fNote").trim();
-    var item = ui.editingId ? byId(ui.editingId) : null;
-    var ops=Promise.resolve(), ff={kind:"note",fileName:"",docKey:undefined,link:""};
-
-    if(pendingDoc){
-      var key=(item&&item.docKey)?item.docKey:uid("doc");
-      ops=docPut(key,pendingDoc.name,pendingDoc.content);
-      ff={kind:"file",fileName:pendingDoc.name,docKey:key,link:""};
-    } else if(item&&item.docKey&&!pendingRemoveFile){
-      ff={kind:"file",fileName:item.fileName,docKey:item.docKey,link:""};
-    } else {
-      if(item&&item.docKey&&pendingRemoveFile) ops=docDel(item.docKey);
-      ff = link ? {kind:"link",fileName:"",docKey:undefined,link:link} : {kind:"note",fileName:"",docKey:undefined,link:""};
-    }
+    var item=ui.editingId?byId(ui.editingId):null;
+    var ops=Promise.resolve(), ff={kind:"note",fileName:"",docKey:undefined,link:"",size:0};
+    if(pendingDoc){ var key=(item&&item.docKey)?item.docKey:uid("doc"); ops=docPut(key,pendingDoc.name,pendingDoc.content);
+      ff={kind:"file",fileName:pendingDoc.name,docKey:key,link:"",size:pendingDoc.size||0}; }
+    else if(item&&item.docKey&&!pendingRemoveFile){ ff={kind:"file",fileName:item.fileName,docKey:item.docKey,link:"",size:item.size||0}; }
+    else { if(item&&item.docKey&&pendingRemoveFile) ops=docDel(item.docKey);
+      ff= link?{kind:"link",fileName:"",docKey:undefined,link:link,size:0}:{kind:"note",fileName:"",docKey:undefined,link:"",size:0}; }
     ops.then(function(){
-      if(item){
-        item.title=title; item.cat=cat; item.tags=tags; item.note=note;
-        item.kind=ff.kind; item.fileName=ff.fileName; item.docKey=ff.docKey; item.link=ff.link; item.updated=Date.now();
-      } else {
-        state.items.unshift({id:uid("i"),title:title,cat:cat,tags:tags,note:note,kind:ff.kind,fileName:ff.fileName,docKey:ff.docKey,link:ff.link,created:Date.now(),updated:Date.now()});
-      }
+      if(item){ item.title=title; item.cat=cat; item.tags=tags; item.note=note; item.kind=ff.kind; item.fileName=ff.fileName; item.docKey=ff.docKey; item.link=ff.link; item.size=ff.size; item.updated=Date.now(); }
+      else { state.items.unshift({id:uid("i"),title:title,cat:cat,tags:tags,note:note,kind:ff.kind,fileName:ff.fileName,docKey:ff.docKey,link:ff.link,size:ff.size,created:Date.now(),updated:Date.now()}); }
       persist(); closeModal(); render();
     }).catch(function(){ alert("保存文件时出错（可能空间不足）。"); });
   }
   function deleteCurrent(){
-    if(!ui.editingId) return;
-    if(!confirm("删除这条资料？此操作不可撤销。")) return;
+    if(!ui.editingId) return; if(!confirm("删除这条资料？此操作不可撤销。")) return;
     var it=byId(ui.editingId); var p=(it&&it.docKey)?docDel(it.docKey):Promise.resolve();
     p.then(function(){ state.items=state.items.filter(function(x){return x.id!==ui.editingId;}); persist(); closeModal(); render(); });
   }
@@ -555,12 +586,54 @@
   // ---------- categories ----------
   function addCategory(){ var inp=document.getElementById("newCatInput"); var name=inp.value.trim(); if(!name) return;
     state.cats.push({id:uid("c"),name:name}); inp.value=""; persist(); render(); }
-  function renameCategory(id){ var c=state.cats.find(function(x){return x.id===id;}); if(!c) return;
-    var name=prompt("重命名分类：",c.name); if(name===null) return; name=name.trim(); if(!name) return; c.name=name; persist(); render(); }
+  function startRename(id){ ui.renamingCat=id; render(); }
+  function commitRename(){ var id=ui.renamingCat; if(!id) return; var inp=document.getElementById("renameInput"); if(!inp){ ui.renamingCat=null; return; }
+    var name=inp.value.trim(); ui.renamingCat=null; if(name){ var c=state.cats.find(function(x){return x.id===id;}); if(c) c.name=name; persist(); } render(); }
   function deleteCategory(id){ var c=state.cats.find(function(x){return x.id===id;}); if(!c) return;
     var n=countIn(id); var msg=n>0?('删除分类「'+c.name+'」？其中 '+n+' 条资料会移到「未归类」。'):('删除分类「'+c.name+'」？');
     if(!confirm(msg)) return; state.items.forEach(function(it){ if(it.cat===id) it.cat=null; });
     state.cats=state.cats.filter(function(x){return x.id!==id;}); if(ui.activeCat===id) ui.activeCat="all"; persist(); render(); }
+
+  // ---------- 长按拖动排序 ----------
+  function reorder(dragId,targetId,after){
+    if(dragId===targetId) return;
+    var di=state.items.findIndex(function(x){return x.id===dragId;});
+    if(di<0) return; var moved=state.items.splice(di,1)[0];
+    var ti=state.items.findIndex(function(x){return x.id===targetId;});
+    if(ti<0){ state.items.push(moved); } else { state.items.splice(after?ti+1:ti,0,moved); }
+    persist(); render();
+  }
+  function enableDrag(){
+    var content=document.getElementById("content");
+    var dragging=null, timer=null, startX=0, startY=0, lastTarget=null, lastAfter=false;
+    function clearMarks(){ var els=content.querySelectorAll(".card.dragover"); for(var i=0;i<els.length;i++) els[i].classList.remove("dragover"); }
+    content.addEventListener("pointerdown", function(e){
+      if(ui.sort!=="added") return; if(e.button&&e.button!==0) return;
+      if(e.target.closest("button,select,a,.tag,[data-open],[data-edit],[data-move],[data-tag]")) return;
+      var card=e.target.closest(".card"); if(!card) return;
+      startX=e.clientX; startY=e.clientY;
+      timer=setTimeout(function(){
+        dragging=card; card.classList.add("dragging"); document.body.style.touchAction="none";
+        try{ content.setPointerCapture(e.pointerId); }catch(_){}
+      },330);
+    });
+    content.addEventListener("pointermove", function(e){
+      if(!dragging){ if(timer && (Math.abs(e.clientX-startX)>8||Math.abs(e.clientY-startY)>8)){ clearTimeout(timer); timer=null; } return; }
+      e.preventDefault();
+      var el=document.elementFromPoint(e.clientX,e.clientY); var over=el&&el.closest?el.closest(".card"):null;
+      clearMarks();
+      if(over && over!==dragging){ over.classList.add("dragover"); var r=over.getBoundingClientRect();
+        lastTarget=over.getAttribute("data-id"); lastAfter=(e.clientY > r.top+r.height/2); }
+      else { lastTarget=null; }
+    });
+    function end(){ if(timer){ clearTimeout(timer); timer=null; }
+      if(dragging){ dragging.classList.remove("dragging"); clearMarks(); document.body.style.touchAction="";
+        var dragId=dragging.getAttribute("data-id"); dragging=null;
+        if(lastTarget){ reorder(dragId,lastTarget,lastAfter); } lastTarget=null; }
+    }
+    content.addEventListener("pointerup", end);
+    content.addEventListener("pointercancel", end);
+  }
 
   // ---------- events ----------
   function bind(){
@@ -568,6 +641,7 @@
     document.getElementById("newCatBtn").addEventListener("click",addCategory);
     document.getElementById("newCatInput").addEventListener("keydown",function(e){ if(e.key==="Enter") addCategory(); });
     document.getElementById("search").addEventListener("input",function(e){ ui.search=e.target.value; render(); });
+    document.getElementById("sortSel").addEventListener("change",function(e){ ui.sort=e.target.value; render(); });
 
     var moreBtn=document.getElementById("moreBtn"), moreMenu=document.getElementById("moreMenu");
     moreBtn.addEventListener("click",function(e){ e.stopPropagation(); moreMenu.classList.toggle("open"); });
@@ -585,27 +659,28 @@
 
     document.getElementById("pickFile").addEventListener("click",function(){ document.getElementById("fileInput").click(); });
     document.getElementById("fileInput").addEventListener("change",function(){
-      var f=this.files[0]; if(!f){ return; }
-      var rd=new FileReader();
-      rd.onload=function(){
-        pendingDoc={name:f.name,content:rd.result}; pendingRemoveFile=false;
-        var t=document.getElementById("fTitle"); if(!t.value.trim()) t.value=f.name.replace(/\.[a-z0-9]+$/i,"");
-        refreshFileChosen();
-      };
+      var f=this.files[0]; if(!f){ return; } var rd=new FileReader();
+      rd.onload=function(){ pendingDoc={name:f.name,content:rd.result,size:f.size}; pendingRemoveFile=false;
+        var t=document.getElementById("fTitle"); if(!t.value.trim()) t.value=f.name.replace(/\.[a-z0-9]+$/i,""); refreshFileChosen(); };
       rd.readAsText(f); this.value="";
     });
-    document.getElementById("fileChosen").addEventListener("click",function(e){
-      if(e.target.id==="removeFile"){ pendingDoc=null; pendingRemoveFile=true; refreshFileChosen(); }
-    });
+    document.getElementById("fileChosen").addEventListener("click",function(e){ if(e.target.id==="removeFile"){ pendingDoc=null; pendingRemoveFile=true; refreshFileChosen(); } });
 
     document.getElementById("viewerClose").addEventListener("click",closeViewer);
-    document.getElementById("viewerNewTab").addEventListener("click",function(){ if(viewerURL) window.open(viewerURL,"_blank"); });
+    document.getElementById("viewerExport").addEventListener("click",viewerExport);
+
+    document.getElementById("tagbar").addEventListener("click",function(e){
+      var t=e.target.closest("[data-tagfilter]"); if(!t) return; var tag=t.getAttribute("data-tagfilter");
+      ui.tag=(ui.tag===tag)?null:tag; render();
+    });
 
     document.getElementById("catList").addEventListener("click",function(e){
-      var b=e.target.closest("[data-cat]"); if(b){ ui.activeCat=b.getAttribute("data-cat"); render(); return; }
-      var r=e.target.closest("[data-rename]"); if(r){ renameCategory(r.getAttribute("data-rename")); return; }
+      var ok=e.target.closest("[data-renameok]"); if(ok){ commitRename(); return; }
+      var r=e.target.closest("[data-rename]"); if(r){ startRename(r.getAttribute("data-rename")); return; }
       var d=e.target.closest("[data-delcat]"); if(d){ deleteCategory(d.getAttribute("data-delcat")); return; }
+      var b=e.target.closest("[data-cat]"); if(b){ ui.activeCat=b.getAttribute("data-cat"); render(); return; }
     });
+
     document.getElementById("content").addEventListener("click",function(e){
       var ea=e.target.closest("#emptyAdd"); if(ea){ openModal(null); return; }
       var op=e.target.closest("[data-open]"); if(op){ e.preventDefault(); var it=byId(op.getAttribute("data-open")); if(it) openItem(it); return; }
@@ -613,15 +688,14 @@
       var tg=e.target.closest("[data-tag]"); if(tg){ ui.tag=tg.getAttribute("data-tag"); render(); return; }
     });
     document.getElementById("content").addEventListener("change",function(e){
-      var mv=e.target.closest("[data-move]");
-      if(mv){ var it=byId(mv.getAttribute("data-move")); if(it){ it.cat=mv.value||null; it.updated=Date.now(); persist(); render(); } }
+      var mv=e.target.closest("[data-move]"); if(mv){ var it=byId(mv.getAttribute("data-move")); if(it){ it.cat=mv.value||null; it.updated=Date.now(); persist(); render(); } }
     });
     document.getElementById("activePills").addEventListener("click",function(e){
       var c=e.target.closest("[data-clear]"); if(!c) return;
-      if(c.getAttribute("data-clear")==="cat") ui.activeCat="all";
-      if(c.getAttribute("data-clear")==="tag") ui.tag=null;
-      render();
+      if(c.getAttribute("data-clear")==="cat") ui.activeCat="all"; if(c.getAttribute("data-clear")==="tag") ui.tag=null; render();
     });
+
+    enableDrag();
   }
 
   bind(); render();
