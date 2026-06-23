@@ -506,8 +506,8 @@
   function renderRail(){
     var list=document.getElementById("catList"); var html="";
     html+=chip("all","全部",state.items.length,ui.activeCat==="all");
-    catsSorted().forEach(function(c){ html+=chip(c.id,c.name,countIn(c.id),ui.activeCat===c.id); });
-    if(uncatCount()>0) html+=chip("__none","未归类",uncatCount(),ui.activeCat==="__none");
+    // 横排固定只显示前 5 个分类（按现有顺序，不排序），多出的进「更多分类」
+    state.cats.slice(0,5).forEach(function(c){ html+=chip(c.id,c.name,countIn(c.id),ui.activeCat===c.id); });
     list.innerHTML=html;
   }
   function chip(id,name,count,active){
