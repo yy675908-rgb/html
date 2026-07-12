@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HTML</title>
+<title>资料库</title>
 <style>
   :root{
     --ink:#21302f; --ink-soft:#47575b; --muted:#8b948e;
@@ -252,14 +252,14 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="HTML">
+<meta name="apple-mobile-web-app-title" content="资料库">
 <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <div class="app">
   <header class="top">
     <div class="brand">
-      <h1><span class="bar"></span>HTML</h1>
+      <h1><span class="bar"></span>资料库</h1>
     </div>
     <div class="top-actions">
       <button class="btn primary" id="addBtn">＋ 添加资料</button>
@@ -283,7 +283,7 @@
       <div class="rail-head"><span>分类</span></div>
       <ul class="cat-list" id="catList"></ul>
       <div class="add-cat">
-        <input id="newCatInput" type="text" placeholder="新建分类…" autocomplete="off">
+        <input id="newCatInput" type="text" placeholder="新建分类，如专业 / 主题…" autocomplete="off">
         <button class="btn sm" id="newCatBtn">＋</button>
       </div>
       <button class="more-cat" id="moreCatBtn">≣ 更多分类 / 管理</button>
@@ -306,7 +306,7 @@
     <div class="modal-body">
       <div class="field">
         <label for="fTitle">标题</label>
-        <input id="fTitle" type="text" placeholder="例如：面瘫诊疗学习资料">
+        <input id="fTitle" type="text" placeholder="例如：课程笔记 / 操作指南">
       </div>
       <div class="field">
         <label for="fCat">分类</label>
@@ -326,11 +326,11 @@
       </div>
       <div class="field">
         <label for="fTags">标签（逗号分隔）</label>
-        <input id="fTags" type="text" placeholder="面神经, 牵正散">
+        <input id="fTags" type="text" placeholder="自行填写，如：重点, 待复习">
       </div>
       <div class="field">
         <label for="fNote">备注 / 笔记</label>
-        <textarea id="fNote" placeholder="写点要点、待补、心得…"></textarea>
+        <textarea id="fNote" placeholder="写点要点、待办或备注…"></textarea>
       </div>
     </div>
     <div class="modal-foot">
@@ -371,7 +371,7 @@
 </div>
 
 <!-- 种子数据：首次打开/清空后载入；之后以本机自动保存为准 -->
-<script id="__seed" type="application/json">{"v":2,"cats":[{"id":"c_nrx","name":"神经病学"},{"id":"c_tcm","name":"中医"},{"id":"c_img","name":"影像"},{"id":"c_book","name":"书"},{"id":"c_file","name":"文件"},{"id":"c_other","name":"其他"}],"items":[]}</script>
+<script id="__seed" type="application/json">{"v":2,"cats":[],"items":[]}</script>
 
 <script>
 (function(){
@@ -410,8 +410,14 @@
 
   // ---------- state ----------
   function load(){
-    try{ var raw=localStorage.getItem(LS_KEY); if(raw){ var s=JSON.parse(raw); if(s&&s.items) return normalize(s); } }catch(e){}
+    try{ var raw=localStorage.getItem(LS_KEY); if(raw){ var s=JSON.parse(raw); if(s&&s.items) return removeUnusedLegacyCategories(normalize(s)); } }catch(e){}
     try{ return normalize(JSON.parse(document.getElementById("__seed").textContent)); }catch(e){ return {v:2,cats:[],items:[]}; }
+  }
+  function removeUnusedLegacyCategories(s){
+    var legacy={c_nrx:"神经病学",c_tcm:"中医",c_img:"影像",c_book:"书",c_file:"文件",c_other:"其他"};
+    var used={}; s.items.forEach(function(it){ if(it.cat) used[it.cat]=true; });
+    s.cats=s.cats.filter(function(c){ return used[c.id] || legacy[c.id]!==c.name; });
+    return s;
   }
   function normalize(s){
     s.v=2; s.cats=s.cats||[]; s.items=s.items||[];
@@ -426,7 +432,7 @@
   function uid(p){ return (p||"id")+"_"+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 
   // ---------- backup ----------
-  function exportBackup(){ docAll().then(function(docs){ download(JSON.stringify({app:"html-archive",v:2,state:state,docs:docs}),"HTML_备份.json","application/json"); }); }
+  function exportBackup(){ docAll().then(function(docs){ download(JSON.stringify({app:"resource-library",v:2,state:state,docs:docs}),"资料库_备份.json","application/json"); }); }
   function importBackup(){
     var inp=document.createElement("input"); inp.type="file"; inp.accept=".json,application/json";
     inp.onchange=function(){ var f=inp.files[0]; if(!f) return; var rd=new FileReader();
@@ -585,7 +591,14 @@
     refreshFileChosen(); document.getElementById("overlay").classList.add("open");
   }
   function closeModal(){ document.getElementById("overlay").classList.remove("open"); ui.editingId=null; }
-  function parseTags(s){ return (s||"").split(/[,，、\s]+/).map(function(t){return t.trim();}).filter(Boolean); }
+  function parseTags(s){
+    var seen={};
+    return (s||"").split(/[,，、\s]+/).map(function(t){return t.trim();}).filter(function(t){
+      var key=t.toLowerCase();
+      if(!t||seen[key]) return false;
+      seen[key]=true; return true;
+    });
+  }
   function saveFromModal(){
     var title=val("fTitle").trim(); if(!title){ document.getElementById("fTitle").focus(); return; }
     var cat=val("fCat")||null, link=val("fLink").trim(), tags=parseTags(val("fTags")), note=val("fNote").trim();
